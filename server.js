@@ -34,19 +34,24 @@ app.get("/api/timestamp/", function(req, res){
 
 app.get("/api/timestamp/:date", function(req, res){
   var date = req.params.date
-  var parsedDate = Number(date)
-  
-  if(parsedDate && typeof parsedDate === 'number'){
-    var utc = new Date(parsedDate).toUTCString()
+  var isNumber = Number(date)
+  var isString = new Date(date)
+  if(isNumber && typeof isNumber === 'number'){
+    var utc = new Date(isNumber).toUTCString()
     return res.json({
-      "unix": parsedDate,
+      "unix": isNumber,
       "utc": utc
     })
   }else{
-    var dateConvert = new Date(date)
+    var validDate = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(date)
+    if(validDate){
+      return res.json({
+        "unix": isString.getTime(),
+        "utc": isString.toUTCString()
+      })  
+    }
     return res.json({
-      "unix": dateConvert.getTime(),
-      "utc": dateConvert.toUTCString()
+      "error": "Invalid Date"
     })
   }
 })
