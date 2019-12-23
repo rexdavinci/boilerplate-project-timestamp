@@ -41,15 +41,14 @@ app.get("/api/timestamp/:date", function(req, res){
     return res.json({
       "unix": parsedDate,
       "utc": utc
-    }) 
+    })
   }else{
-    var stringDate = new Date(req.params.date)
+    var dateConvert = new Date(date)
     return res.json({
-      "unix": stringDate.getTime(),
-      "utc": stringDate.toUTCString()
-    }) 
+      "unix": dateConvert.getTime(),
+      "utc": dateConvert.toUTCString()
+    })
   }
-        
 })
 
 // listen for requests :)
